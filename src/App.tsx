@@ -72,7 +72,7 @@ export default class App extends React.Component<Props, State> {
     if (isRecord) {
       Voice.stop();
     } else {
-      Voice.start('ja-JP');
+      Voice.start('en-US');
     }
     this.setState({
       isRecord: !isRecord,
