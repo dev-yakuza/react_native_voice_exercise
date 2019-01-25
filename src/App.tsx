@@ -46,6 +46,9 @@ export default class App extends React.Component<Props, State> {
       </Container>
     );
   }
+  componentWillUnmount() {
+    Voice.destroy().then(Voice.removeAllListeners);
+  }
 
   private _onSpeechStart = event => {
     console.log('onSpeechStart');
