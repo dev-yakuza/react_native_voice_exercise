@@ -75,7 +75,7 @@ npm run io
 npm run android
 ```
 
-## how to usereact_native_voice_exercise
+## how to use react_native_voice_exercise
 react_native_voice_exercise repository is an example about ```react-native-voice```.
 
 - react-native-voice official site: [https://github.com/wenkesj/react-native-voice](https://github.com/wenkesj/react-native-voice)
