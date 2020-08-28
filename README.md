@@ -34,7 +34,7 @@ npm install
 
 ```bash
 # iOS
-npm run io
+npm run ios
 # Android
 npm run android
 ```
@@ -70,7 +70,7 @@ npm install
 
 ```bash
 # iOS
-npm run io
+npm run ios
 # Android
 npm run android
 ```
@@ -106,7 +106,7 @@ execute below command to start iOS or Android simulator.
 
 ```bash
 # iOS
-npm run io
+npm run ios
 # Android
 npm run android
 ```
