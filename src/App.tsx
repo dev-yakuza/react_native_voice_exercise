@@ -1,84 +1,69 @@
-import * as React from 'react';
-import styled from 'styled-components/native';
+import React, {useState, useEffect} from 'react';
+import Styled from 'styled-components/native';
 import Voice from 'react-native-voice';
 
-const Container = styled.View`
+const Container = Styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
   background-color: #f5fcff;
 `;
-const ButtonRecord = styled.Button``;
-const VoiceText = styled.Text`
+const ButtonRecord = Styled.Button``;
+const VoiceText = Styled.Text`
   margin: 32px;
 `;
-interface Props {}
-interface State {
-  isRecord: boolean;
-  voice: string;
-}
-export default class App extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
 
-    this.state = {
-      isRecord: false,
-      voice: undefined,
-    };
+const App = () => {
+  const [isRecord, setIsRecord] = useState<boolean>(false);
+  const [text, setText] = useState<string>('');
+  const buttonLabel = isRecord ? 'Stop' : 'Start';
+  const voiceLabel = text
+    ? text
+    : isRecord
+    ? 'Say something...'
+    : 'press Start button';
 
-    Voice.onSpeechStart = this._onSpeechStart;
-    Voice.onSpeechEnd = this._onSpeechEnd;
-    Voice.onSpeechResults = this._onSpeechResults;
-    Voice.onSpeechError = this._onSpeechError;
-  }
-  render() {
-    const { isRecord, voice } = this.state;
-    const buttonLabel = isRecord ? 'Stop' : 'Start';
-    const voiceLabel = voice
-      ? voice
-      : isRecord
-      ? 'Say something...'
-      : 'press Start button';
-    return (
-      <Container>
-        <VoiceText>{voiceLabel}</VoiceText>
-        <ButtonRecord onPress={this._onRecordVoice} title={buttonLabel} />
-      </Container>
-    );
-  }
-  componentWillUnmount() {
-    Voice.destroy().then(Voice.removeAllListeners);
-  }
-
-  private _onSpeechStart = event => {
+  const _onSpeechStart = () => {
     console.log('onSpeechStart');
-    this.setState({
-      voice: '',
-    });
+    setText('');
   };
-  private _onSpeechEnd = event => {
+  const _onSpeechEnd = () => {
     console.log('onSpeechEnd');
   };
-  private _onSpeechResults = event => {
+  const _onSpeechResults = (event) => {
     console.log('onSpeechResults');
-    this.setState({
-      voice: event.value[0],
-    });
+    setText(event.value[0]);
   };
-  private _onSpeechError = event => {
+  const _onSpeechError = (event) => {
     console.log('_onSpeechError');
     console.log(event.error);
   };
 
-  private _onRecordVoice = () => {
-    const { isRecord } = this.state;
+  const _onRecordVoice = () => {
     if (isRecord) {
       Voice.stop();
     } else {
       Voice.start('en-US');
     }
-    this.setState({
-      isRecord: !isRecord,
-    });
+    setIsRecord(!isRecord);
   };
-}
+
+  useEffect(() => {
+    Voice.onSpeechStart = _onSpeechStart;
+    Voice.onSpeechEnd = _onSpeechEnd;
+    Voice.onSpeechResults = _onSpeechResults;
+    Voice.onSpeechError = _onSpeechError;
+
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+  return (
+    <Container>
+      <VoiceText>{voiceLabel}</VoiceText>
+      <ButtonRecord onPress={_onRecordVoice} title={buttonLabel} />
+    </Container>
+  );
+};
+
+export default App;
